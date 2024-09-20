@@ -1,24 +1,28 @@
 import "./App.css";
 import ContactForm from "../ContactForm/ContactForm";
-// import { useEffect, useState } from "react";
 import "./App.css";
 import SearchBox from "../SearchBox/SearchBox";
 import ContactList from "../ContactList/ContactList";
 
-export default function App() {
-  // const [contacts, setContacts] = useState(() => {
-  //   const savedContacts = window.localStorage.getItem("saved-contacts");
-  //   return savedContacts ? JSON.parse(savedContacts) : initialContacts;
-  // });
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchContacts } from "../../redux/contactsOps";
 
-  // useEffect(() => {
-  //   window.localStorage.setItem("saved-contacts", JSON.stringify(contacts));
-  // }, [contacts]);
+export default function App() {
+  const selectIsLoading = useSelector((state) => state.contacts.loading);
+  const selectIsError = useSelector((state) => state.contacts.error);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   return (
     <div>
       <h1>Phonebook</h1>
       <ContactForm />
+      {selectIsLoading && !selectIsError && <b>Request in progress...</b>}
       <SearchBox />
       <ContactList />
     </div>

@@ -4,7 +4,7 @@ import "yup-phone-lite";
 import { useId } from "react";
 import css from "./ContactForm.module.css";
 import { useDispatch } from "react-redux";
-import { addContact } from "../../redux/contactsSlice";
+import { addContact } from "../../redux/contactsOps";
 
 const FeedbackSchema = Yup.object().shape({
   name: Yup.string()
@@ -26,15 +26,9 @@ export default function ContactForm() {
   const nameFieldId = useId();
   const numberFieldId = useId();
 
-  const handleSubmit = (values, { resetForm }) => {
-    dispatch(
-      addContact({
-        id: crypto.randomUUID(),
-        number: values.number,
-        name: values.name,
-      })
-    );
-    resetForm();
+  const handleSubmit = (values, actions) => {
+    dispatch(addContact(values));
+    actions.resetForm();
   };
 
   return (
